@@ -11,6 +11,19 @@ class App extends React.Component {
     searchQuery: '',
   };
 
+  componentDidMount() {
+    this.setState(prevState => ({
+      ...prevState,
+      contacts: JSON.parse(localStorage.getItem('contacts')) ?? [],
+    }));
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = contact => {
     const { contacts } = this.state;
     const duplicate = contacts.find(el => el.name === contact.name);
